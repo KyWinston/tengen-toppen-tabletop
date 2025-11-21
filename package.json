@@ -1,0 +1,19 @@
+{
+  "name": "tengen-toppen-tabletop",
+  "version": "1.0.0",
+  "description": "a tabletop sim for school",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KyWinston/tengen-toppen-tabletop.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KyWinston/tengen-toppen-tabletop/issues"
+  },
+  "homepage": "https://github.com/KyWinston/tengen-toppen-tabletop#readme"
+}

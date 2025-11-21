@@ -1,6 +1,5 @@
-#playArea{
-    width: 30%;
-    position: absolute;
-    right:0;
-    height: 40%;
+#diceDrawer{
+    width:30%;
+    margin-left:70%;
+    height:70%;
 }
