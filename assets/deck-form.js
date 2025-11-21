@@ -21,3 +21,7 @@ let deck_form_html = `<div class="input-group">
     </div>
     <input class="form-control mb-9" id="deckBack"></input>
 </div>`;
+
+let deck_place_html =`
+    <select type="text" class="form-control" id="deckSelect" value="" aria-describedby="cardName" placeholder="Choose a deck to place on the board">
+    </select>`;
