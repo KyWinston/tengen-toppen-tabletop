@@ -21,7 +21,7 @@ let modal_state = 0;
 let setup_json = {
     cards: [],
     decks: [],
-    boards: [],
+    board: "",
     tiles: [],
     counters: [],
     figures: []

@@ -1,25 +1,25 @@
-const draggableElement = document.getElementsByClassName('draggable');
+let draggableElements = document.getElementsByClassName('draggable');
 let isDragging = false;
 let offsetX, offsetY;
 
-draggableElement.forEach(element => {
+Array.from(draggableElements).forEach(element => {
 
     element.addEventListener('mousedown', (e) => {
         isDragging = true;
-        offsetX = e.clientX - draggableElement.offsetLeft;
-        offsetY = e.clientY - draggableElement.offsetTop;
-        draggableElement.style.cursor = 'grabbing';
+        offsetX = e.clientX - element.offsetLeft;
+        offsetY = e.clientY - element.offsetTop;
+        element.style.cursor = 'grabbing';
     });
 
     document.addEventListener('mousemove', (e) => {
         if (!isDragging) return;
 
-        draggableElement.style.left = (e.clientX - offsetX) + 'px';
-        draggableElement.style.top = (e.clientY - offsetY) + 'px';
+        element.style.left = (e.clientX - offsetX) + 'px';
+        element.style.top = (e.clientY - offsetY) + 'px';
     });
 
     document.addEventListener('mouseup', () => {
         isDragging = false;
-        draggableElement.style.cursor = 'grab';
+        element.style.cursor = 'grab';
     });
 });

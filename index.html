@@ -40,7 +40,7 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto col-4 mb-lg-0">
+                <ul class="navbar-nav me-auto col-8 mb-lg-0">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -49,10 +49,9 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="#" onclick="createPiece(0)">Card</a></li>
                             <li><a class="dropdown-item" href="#" onclick="createPiece(1)">Deck</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="createPiece(2)">Board</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="createPiece(3)">Tile</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="createPiece(4)">Counter</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="createPiece(5)">Figure</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="createPiece(2)">Tile</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="createPiece(3)">Counter</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="createPiece(4)">Figure</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -63,10 +62,9 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item " href="#" onclick="editPiece(0)">Card</a></li>
                             <li><a class="dropdown-item" href="#" onclick="editPiece(1)">Deck</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editPiece(2)">Board</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editPiece(3)">Tile</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editPiece(4)">Counter</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editPiece(5)">Figure</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editPiece(2)">Tile</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editPiece(3)">Counter</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editPiece(4)">Figure</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -76,30 +74,27 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="#" onclick="placePiece(0)">Deck</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="placePiece(1)">Board</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="placePiece(2)">Tile</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="placePiece(3)">Counter</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="placePiece(4)">Figure</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="placePiece(1)">Tile</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="placePiece(2)">Counter</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="placePiece(3)">Figure</a></li>
                         </ul>
                     </li>
+                    <li>
+                        <input id="boardImg" value="" type="text" placeholder="enter an image url for the board"
+                            class="form-control" onchange="update_board(this.value)">
+                    </li>
                 </ul>
-                <form class="d-flex col-6">
-                    <div class="form-floating col-5">
-                        <input placeholder="1" id="Amnt" type="number" max="20" min="0" class="form-control"
-                            onchange="update_dice_amnt(this.value)">
-                        <label for="Amnt">Amount</label>
-
+                <form class="d-flex col-4">
+                    <div class="form-floating col-8 me-auto">
+                        <input placeholder="1" id="Amnt" type="text" class="form-control"
+                            onchange="update_dice_commands(this.value)">
+                        <label for="Amnt">Dice commands</label>
                     </div>
-                    <div class="form-floating col-5">
-                        <input placeholder="6" max="100" min="4" id="sides" type="number" class="form-control"
-                            onchange="update_dice_sides(this.value)">
-                        <label for="sides"># of sides</label>
 
-                    </div>
                     <button class="btn btn-outline-success" type="button" onclick="roll_dice()">Roll
-                        Dice</button>
+                        Dice
+                    </button>
                 </form>
-
             </div>
         </div>
 
@@ -112,13 +107,21 @@
         </div>
         <div id="diceTray" class="offcanvas-body">
             <b id="diceResult">Rolling...</b>
-
         </div>
     </div>
-    <div id="playArea">
+    <canvas id="playArea">
 
-    </div>
-
+    </canvas>
+    <!-- <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto"></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+            </div>
+        </div>
+    </div> -->
 </body>
 <script type="text/javascript" src="js/cannon.min.js"></script>
 <script type="text/javascript" src="js/teal.js"></script>
@@ -132,25 +135,78 @@
 <script type="text/javascript" src="js/dice.js"></script>
 <script>
     getStorage();
+
     var box = new DICE.dice_box(document.getElementById("diceTray"));
     let dice_tray = new bootstrap.Offcanvas(document.getElementById("diceDrawer"));
+    let canvas = document.getElementById('playArea');
+    document.getElementById("boardImg").value = setup_json.board;
+    const ctx = canvas.getContext('2d');
 
-    let dice = 6;
-    let amount = 1;
-    function update_dice_sides(sides) {
-        dice = sides;
+    function update_board(board) {
+        setup_json.board = board;
+        img.src = setup_json.board;
+        localStorage.setItem("setup", JSON.stringify(setup_json));
+
+        drawContent();
+
     }
-    function update_dice_amnt(amnt) {
-        amount = amnt;
+
+    let panning = false;
+    let lastX = 0;
+    let lastY = 0;
+    let canvasOffsetX = 0; // Accumulated X offset
+    let canvasOffsetY = 0; // Accumulated Y offset
+    let img = new Image();
+
+    img.src = setup_json.board;
+    img.onload = function () {
+        ctx.drawImage(img, canvasOffsetX, canvasOffsetY); // Draw image at top-left corner (0,0)
     }
+    canvas.addEventListener('mousedown', (e) => {
+        panning = true;
+        lastX = e.clientX;
+        lastY = e.clientY;
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+        if (!panning) return;
+
+        const dx = e.clientX - lastX;
+        const dy = e.clientY - lastY;
+
+        canvasOffsetX += dx;
+        canvasOffsetY += dy;
+
+        lastX = e.clientX;
+        lastY = e.clientY;
+
+        drawContent();
+    });
+
+    canvas.addEventListener('mouseup', () => {
+        panning = false;
+    });
+
+    function drawContent() {
+        ctx.save(); // Save the current state of the canvas context
+        ctx.drawImage(img, canvasOffsetX, canvasOffsetY); // Draw image at top-left corner (0,0)
+        ctx.restore(); // Restore the canvas context to its state before translation
+    }
+
+
+    canvas.addEventListener('mouseleave', () => { // Optional: Stop dragging if mouse leaves canvas
+        panning = false;
+    });
+
+    function update_dice_commands(sides) {
+        box.setDice(sides);
+    }
+
     function roll_dice() {
-        box.setDice(amount + "d" + dice);
-
-        box.start_throw(() => {
+        box.start_throw((notation) => {
             dice_tray.show();
-
         }, (notation) => {
-            document.getElementById('diceResult').innerText = "Result:" + notation.resultString;
+            document.getElementById('diceResult').innerText = "Result: " + notation.resultString;
         });
     }
 </script>
