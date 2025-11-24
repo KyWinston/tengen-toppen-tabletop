@@ -1,14 +1,21 @@
 function confirmPiece() {
   let modal = new bootstrap.Modal("#modalForm");
-  switch (modal_state) {
+  switch (modal_type) {
     case 0:
-      let card_name = $('input#cardName').val();
-      let main_text = $('#mainText').val();
-      let pips = `${$('input#pipTL').val()}|${$('input#pipTR').val()}|${$('input#pipBR').val()}|${$('input#pipBL').val()}`;
-      console.log(card_name, pips, main_text);
-      setup_json.cards.push({ card_name, pips, main_text });
-      localStorage.setItem('setup', JSON.stringify(setup_json));
-      break
+      switch (modal_state) {
+        case 0:
+          let card_name = $('input#cardName').val();
+          let main_text = $('#mainText').val();
+          let pips = `${$('input#pipTL').val()}|${$('input#pipTR').val()}|${$('input#pipBR').val()}|${$('input#pipBL').val()}`;
+          console.log(card_name, pips, main_text);
+          setup_json.cards.push({ card_name, pips, main_text });
+          localStorage.setItem('setup', JSON.stringify(setup_json));
+          break;
+        case 2:
+          let new_deck = $(deck_object_html);
+          $('#playArea').append(new_deck);
+      }
+      break;
     case 1:
       let deck_name = $('input#deckName').val();
       let card_back = $('input#deckBack').val();
@@ -24,16 +31,16 @@ function confirmPiece() {
 
 function createPiece(type) {
   let modal = new bootstrap.Modal("#modalForm");
-
+  modal_state = 0;
   switch (type) {
     case 0:
-      modal_state = 0;
+      modal_type = 0;
       $("#modalForm > .modal-dialog > .modal-content > .modal-header > .modal-title").html('<p>Create a new card</p>');
       $("#modalForm > .modal-dialog > .modal-content > .modal-body").html(card_form_html);
       $("#modalForm > .modal-dialog > .modal-content > .modal-footer > .btn-primary").html('Create card');
       break;
     case 1:
-      modal_state = 1;
+      modal_type = 1;
       $("#modalForm > .modal-dialog > .modal-content > .modal-header > .modal-title").html('<p>Create a new deck</p>');
       $("#modalForm > .modal-dialog > .modal-content > .modal-body").html(deck_form_html);
       $("#modalForm > .modal-dialog > .modal-content > .modal-footer > .btn-primary").html('Create deck');
@@ -45,9 +52,10 @@ function createPiece(type) {
 
 function placePiece(type) {
   let modal = new bootstrap.Modal("#modalForm");
+  modal_state = 2;
   switch (type) {
     case 0:
-      modal_state = 0;
+      modal_type = 0;
       $("#modalForm > .modal-dialog > .modal-content > .modal-header > .modal-title").html('<p>pick a deck</p>');
       $("#modalForm > .modal-dialog > .modal-content > .modal-body").html(deck_place_html);
       setup_json.decks.forEach(element => {

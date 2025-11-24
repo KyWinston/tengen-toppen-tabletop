@@ -17,11 +17,11 @@
 // };
 
 let modal_state = 0;
-
+let modal_type = 0;
 let setup_json = {
     cards: [],
     decks: [],
-    board: "",
+    board: { src: "", pan: [0, 0], zoom: 0 },
     tiles: [],
     counters: [],
     figures: []

@@ -4,7 +4,23 @@
     height: 70%;
 }
 
-#playArea {
+#boardBack {
+    position: absolute;
     height: 85vh;
     width: 100vW;
+    z-index: 0;
+}
+
+#playArea {
+    position: absolute;
+    height: 85vh;
+    width: 100vW;
+}
+
+#playArea>.drag {
+    position: absolute;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }

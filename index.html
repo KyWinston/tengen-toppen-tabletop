@@ -109,9 +109,9 @@
             <b id="diceResult">Rolling...</b>
         </div>
     </div>
-    <canvas id="playArea">
-
-    </canvas>
+    <div id="playArea">
+        <canvas id="boardBack"></canvas>
+    </div>
     <!-- <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
@@ -138,13 +138,13 @@
 
     var box = new DICE.dice_box(document.getElementById("diceTray"));
     let dice_tray = new bootstrap.Offcanvas(document.getElementById("diceDrawer"));
-    let canvas = document.getElementById('playArea');
-    document.getElementById("boardImg").value = setup_json.board;
+    let canvas = document.getElementById('boardBack');
+    document.getElementById("boardImg").value = setup_json.board.src;
     const ctx = canvas.getContext('2d');
 
     function update_board(board) {
-        setup_json.board = board;
-        img.src = setup_json.board;
+        setup_json.board.src = board;
+        img.src = setup_json.board.src;
         localStorage.setItem("setup", JSON.stringify(setup_json));
 
         drawContent();
@@ -154,11 +154,11 @@
     let panning = false;
     let lastX = 0;
     let lastY = 0;
-    let canvasOffsetX = 0; // Accumulated X offset
-    let canvasOffsetY = 0; // Accumulated Y offset
+    let canvasOffsetX = setup_json.board.pan[0]; // Accumulated X offset
+    let canvasOffsetY = setup_json.board.pan[1]; // Accumulated Y offset
     let img = new Image();
 
-    img.src = setup_json.board;
+    img.src = setup_json.board.src;
     img.onload = function () {
         ctx.drawImage(img, canvasOffsetX, canvasOffsetY); // Draw image at top-left corner (0,0)
     }
@@ -179,6 +179,7 @@
 
         lastX = e.clientX;
         lastY = e.clientY;
+        updateDraggables(canvasOffsetX, canvasOffsetY);
 
         drawContent();
     });
@@ -188,9 +189,15 @@
     });
 
     function drawContent() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear previous drawings
+
         ctx.save(); // Save the current state of the canvas context
+        setup_json.board.pan = [canvasOffsetX, canvasOffsetY];
+
+        localStorage.setItem('setup', JSON.stringify(setup_json));
         ctx.drawImage(img, canvasOffsetX, canvasOffsetY); // Draw image at top-left corner (0,0)
         ctx.restore(); // Restore the canvas context to its state before translation
+
     }
 
 
